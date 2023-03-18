@@ -40,5 +40,132 @@ def index():
     return render_template("index.html")
 
 
+# student login
+@app.route("/student_login", methods=["GET", "POST"])
+def student_login():
+    """Log user in"""
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM students WHERE username = :username",
+                          username=request.form.get("username"))
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return apology("invalid username and/or password", 403)
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        # remember if user is a student or teacher
+        session["user_type"] = "student"
+
+        # Redirect user to home page
+        return redirect("/student_home")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("student_login.html")
 
 
+
+# students main page
+@app.route("/student_home")
+@login_required_student
+def student_home():
+    """Show student home page"""
+    return render_template("student_home.html")
+
+# teacher login
+@app.route("/teacher_login", methods=["GET", "POST"])
+def teacher_login():
+    """Log user in"""
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+         # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+        
+        # Query database for username
+        rows = db.execute("SELECT * FROM teachers WHERE username = :username",
+                          username=request.form.get("username"))
+        
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return apology("invalid username and/or password", 403)
+        
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        # remember if user is a student or teacher
+        session["user_type"] = "teacher"
+
+        # Redirect user to home page
+        return redirect("/teacher_home")
+    else
+        return render_template("teacher_login.html")
+    
+# register teacher
+@app.route("/register_teacher", methods=["GET", "POST"])
+def register_teacher():
+    """Register user"""
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+
+        # Ensure password was submitted
+        elif not request.form.get("confirmation"):
+            return apology("must provide password confirmation", 403)
+
+        # Ensure password and confirmation match
+        elif request.form.get("password") != request.form.get("confirmation"):
+            return apology("passwords must match", 403)
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM teachers WHERE username = :username",
+                          username=request.form.get("username"))
+
+        # Ensure username does not already exist
+        if len(rows) == 1:
+            return apology("username already exists", 403)
+
+        # Insert user into database
+        db.execute("INSERT INTO teachers (username, hash) VALUES(:username, :hash)",
+                   username=request.form.get("username"), hash=generate_password_hash(request.form.get("password")))
+
+        # Redirect user to home page
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("register_teacher.html")

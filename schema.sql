@@ -1,15 +1,31 @@
+-- Author: Mohammed Ali
+-- Date: 2023-03-19
+-- Description: This file contains the Schema for the Quizing tool database using SQLite
+
+-- Drop tables if they exist
+DROP TABLE IF EXISTS Answers;
+DROP TABLE IF EXISTS Document_Questions;
+DROP TABLE IF EXISTS Documents;
+DROP TABLE IF EXISTS Options;
+DROP TABLE IF EXISTS Questions;
+DROP TABLE IF EXISTS Categories;
+DROP TABLE IF EXISTS Students;
+DROP TABLE IF EXISTS Teachers;
+
+-- Create tables
 CREATE TABLE Teachers (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    hash TEXT NOT NULL
 );
+
 
 CREATE TABLE Students (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     student_number TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL
+    hash TEXT NOT NULL
 );
 
 CREATE TABLE Categories (
@@ -56,4 +72,17 @@ CREATE TABLE Answers (
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES Students(id),
     FOREIGN KEY (question_id) REFERENCES Questions(id)
+);
+
+-- a table for each question and document that are live
+CREATE TABLE Live_Questions (
+    id SERIAL PRIMARY KEY,
+    question_id INTEGER NOT NULL,
+    FOREIGN KEY (question_id) REFERENCES Questions(id)
+);
+
+CREATE TABLE Live_Documents (
+    id SERIAL PRIMARY KEY,
+    document_id INTEGER NOT NULL,
+    FOREIGN KEY (document_id) REFERENCES Documents(id)
 );

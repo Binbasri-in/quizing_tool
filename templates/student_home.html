@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Welcome student
+{% endblock %}
+
+{% block main %}
+    <!-- a div where left side is a button to question ID form and right side Document ID form -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center">Welcome student, choose your target</h1>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <form action="/student_question" method="post">
+                    <div class="form-group">
+                        <input autocomplete="off" autofocus class="form-control" name="question_id" placeholder="Question ID" type="text">
+                    </div>
+                    <button class="btn btn-primary" type="submit">Go to Question</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <form action="/student_document" method="post">
+                    <div class="form-group">
+                        <input autocomplete="off" autofocus class="form-control" name="document_id" placeholder="Document ID" type="text">
+                    </div>
+                    <button class="btn btn-primary" type="submit">Go to Document</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
