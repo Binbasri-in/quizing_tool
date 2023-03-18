@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add New
+{% endblock %}
+
+{% block main %}
+<form action="/new" method="post">
+    <div class="form-group">
+        <label>Enter DNA STRs</label>
+        <div class="form-group">
+            <label for="name">Name of Owner</label>
+            <input autocomplete="off" autofocus class="form-control" name="name" placeholder="Enter Name of Owner" type="text">
+        </div>
+        <div class="form-group">
+            <label for="filename">Filename where the DNA is</label>
+            <!-- Read a the file from user and apply get_str() function on it once it is submited-->
+            <input type="file" name="filename" id="filename" accept=".txt">
+        </div>
+    </div>
+    <div class="form-group result" style="display: none;">
+        <label>Results</label>
+        <label for="AGATC">AGATC</label>
+        <input disabled class="form-control" name="AGATC" placeholder="AGATC" type="text">
+        <label for="TTTTTTCT">TTTTTTCT</label>
+        <input disabled class="form-control" name="TTTTTTCT" placeholder="TTTTTTCT" type="text">
+        <label for="AATG">AATG</label>
+        <input disabled class="form-control" name="AATG" placeholder="AATG" type="text">
+        <label for="TCTAG">TCTAG</label>
+        <input disabled class="form-control" name="TCTAG" placeholder="TCTAG" type="text">
+        <label for="GATA">GATA</label>
+        <input disabled class="form-control" name="GATA" placeholder="GATA" type="text">
+        <label for="TATC">TATC</label>
+        <input disabled class="form-control" name="TATC" placeholder="TATC" type="text">
+        <label for="GAAA">GAAA</label>
+        <input disabled class="form-control" name="GAAA" placeholder="GAAA" type="text">
+        <label for="TCTG">TCTG</label>
+        <input disabled class="form-control" name="TCTG" placeholder="TCTG" type="text">
+    </div>
+    <button class="btn btn-primary" type="submit" onclick="activate()">Add To Database</button>
+</form>
+{% endblock %}
+
+
+{% block javascript %}
+    <script>
+        function get_str_counts(filename)
+        {
+            const STRs = ["AGATC", "TTTTTTCT", "AATG", "TCTAG", "GATA", "TATC", "GAAA", "TCTG"];
+            // read file as text
+            var file = document.getElementById("filename").files[0];
+            var reader = new FileReader();
+            reader.readAsText(file);
+            // count the max count of STR repeats sequencialy in the file
+            reader.onload = function(event){
+                var text = event.target.result;
+                var counts = [];
+                for (var i = 0; i < STRs.length; i++)
+                {
+                    var count = 0;
+                    var max_count = 0;
+                    var str = STRs[i];
+                    // count count how many times the substring is repeated sequencialy
+                    for (var j = 0, l = text.length; j < l; j++)
+                    {
+                        if (text.substr(j, str.length) == str)
+                        {
+                            count++;
+                            j += str.length - 1;
+                        }
+                        else
+                        {
+                            if (count > max_count)
+                            {
+                                max_count = count;
+                            }
+                            count = 0;
+                        }
+                    }
+                    counts.push(max_count);
+                }
+                // display the counts
+                var result = document.getElementsByClassName("result")[0];
+                for (var i = 0; i < STRs.length; i++)
+                {
+                    var input = result.getElementsByTagName("input")[i];
+                    input.value = counts[i];
+                }
+            };
+
+        }
+        // call get_str_counts() function when the file is selected
+        document.getElementById("filename").addEventListener("change", get_str_counts);
+
+        // activate the input fields
+        function activate()
+        {
+            var result = document.getElementsByClassName("result")[0];
+            var inputs = result.getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++)
+            {
+                inputs[i].disabled = false;
+            }
+        }
+    </script>
+{% endblock %}

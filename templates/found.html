@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    A match was found
+{% endblock %}
+
+{% block main %}
+    <table class="table table-triped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>AGATC</th>
+                <th>TTTTTTCT</th>
+                <th>AATG</th>
+                <th>TCTAG</th>
+                <th>GATA</th>
+                <th>TATC</th>
+                <th>GAAA</th>
+                <th>TCTG</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ row.owner_name }}</td>
+                <td>{{ row.AGATC }}</td>
+                <td>{{ row.TTTTTTCT }}</td>
+                <td>{{ row.AATG }}</td>
+                <td>{{ row.TCTAG }}</td>
+                <td>{{ row.GATA }}</td>
+                <td>{{ row.TATC }}</td>
+                <td>{{ row.GAAA }}</td>
+                <td>{{ row.TCTG }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

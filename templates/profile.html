@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    profile
+{% endblock %}
+
+{% block main%}
+
+<!-- A big header that shows a big header-->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">Welcome to your Data</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- recive the data of the user and print it-->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Lab Name</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Zip</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ user_info.lab_name }}</td>
+                    <td>{{ user_info.lab_city }}</td>
+                    <td>{{ user_info.lab_state }}</td>
+                    <td>{{ user_info.lab_zip }}</td>
+                    <td>{{ user_info.lab_phone }}</td>
+                    <td>{{ user_info.lab_email }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>AGATC</th>
+                <th>TTTTTTCT</th>
+                <th>AATG</th>
+                <th>TCTAG</th>
+                <th>GATA</th>
+                <th>TATC</th>
+                <th>GAAA</th>
+                <th>TCTG</th>
+                <th>delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dna in user_strs %}
+                <tr>
+                    <td>{{ dna.owner_name }}</td>
+                    <td>{{ dna.AGATC }}</td>
+                    <td>{{ dna.TTTTTTCT }}</td>
+                    <td>{{ dna.AATG }}</td>
+                    <td>{{ dna.TCTAG }}</td>
+                    <td>{{ dna.GATA }}</td>
+                    <td>{{ dna.TATC }}</td>
+                    <td>{{ dna.GAAA }}</td>
+                    <td>{{ dna.TCTG }}</td>
+                    <td>
+                        <form action="\delete" method="POST">
+                            <input type="hidden" name="id" value="{{ dna.id }}">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+
+{% endblock %}
